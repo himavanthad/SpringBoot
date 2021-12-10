@@ -2,6 +2,8 @@ package com.companyportal.app;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,55 +14,66 @@ import com.companyportal.app.entity.Employee;
 import com.companyportal.app.service.EmployeeService;
 
 @RestController
+@RequestMapping("/Employee")
 public class EmployeeRestController {
 
 	@Autowired
 	EmployeeService employeeService;
 
 	@RequestMapping(value = "/getAllEmployees", method = RequestMethod.GET, headers = "Accept=application/json")
-	public List<Employee> getEmployee() {
+	public ResponseEntity<List<Employee>> getEmployee() {
+		try {
+			List<Employee> list = employeeService.getAllEmployees();
 
-		List<Employee> listOfEmployees = employeeService.getAllEmployees();
-		return listOfEmployees;
+			if (list.isEmpty() || list.size() == 0) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
+			return new ResponseEntity<>(list, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	@RequestMapping(value = "/getEmployee/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
-	public Employee getEmployeeById(@PathVariable int id) {
-		return employeeService.getEmployee(id);
+	public ResponseEntity<Employee> getEmployeeById(@PathVariable int id) {
+		Employee employee = employeeService.getEmployee(id);
+
+		if (employee != null) {
+			return new ResponseEntity<Employee>(employee, HttpStatus.OK);
+		}
+		return new ResponseEntity<Employee>(HttpStatus.NOT_FOUND);
 	}
 
 	@RequestMapping(value = "/addEmployee", method = RequestMethod.POST, headers = "Accept=application/json")
-	public Employee addEmployee(@RequestBody Employee employee) {
-		employeeService.saveEmployeeData(employee);
-		return employeeService.getEmployee(employee.getEmployeeId());
+	public ResponseEntity<Employee> addEmployee(@RequestBody Employee employee) {
+		/*employeeService.saveEmployeeData(employee);
+		return employeeService.getEmployee(employee.getEmployeeId());*/
+		try {
+			employeeService.saveEmployeeData(employee);
+			return new ResponseEntity<Employee>(employee, HttpStatus.CREATED);
+		} catch (Exception e) {
+			return new ResponseEntity<Employee>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	@RequestMapping(value = "/updateEmployee", method = RequestMethod.PUT, headers = "Accept=application/json")
-	public String updateEmployee(@RequestBody Employee employee) {
-		Employee emp = null;
-		if(employee.getEmployeeId() != null && employee.getEmployeeId() > 0) {
-			emp = employeeService.getEmployee(employee.getEmployeeId());
-		}
-		
-		employeeService.editEmployeeData(employee);
-		if(emp != null) {
-			return "Updated";
-		}else
-		{
-			return "Saved";
+	public ResponseEntity<Employee> updateEmployee(@RequestBody Employee employee) {
+		try {
+			employeeService.editEmployeeData(employee);
+			return new ResponseEntity<Employee>(employee, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<Employee>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@RequestMapping(value = "/deleteEmployee/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
-	public String deleteEmployee(@PathVariable("id") int id) {
-		Employee emp = employeeService.getEmployee(id);
-		if(emp != null) {
-			employeeService.deleteEmployee(id);		
-			return "Deleted";
-		}else
-		{
-			return "Not Deleted";
+	public ResponseEntity<String> deleteEmployee(@PathVariable("id") int id) {
+		try {
+			employeeService.deleteEmployee(id);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
 	}
 }
