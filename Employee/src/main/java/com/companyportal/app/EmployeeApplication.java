@@ -1,4 +1,5 @@
-package com.companyportal.app.employee;
+package com.companyportal.app;
+
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -23,16 +23,12 @@ public class Employee {
 	private String phoneNo;
 	
 	
-	public Employee(String name, String project, String mailId, String phoneNo) {
-		super();
-		this.name = name;
-		this.project = project;
-		this.mailId = mailId;
-		this.phoneNo = phoneNo;
-	}
-	public Employee() {
-		// TODO Auto-generated constructor stub
-	}
+	/*
+	 * public Employee(String name, String project, String mailId, String phoneNo) {
+	 * super(); this.name = name; this.project = project; this.mailId = mailId;
+	 * this.phoneNo = phoneNo; }
+	 */
+	
 	public Integer getEmployeeId() {
 		return employeeId;
 	}

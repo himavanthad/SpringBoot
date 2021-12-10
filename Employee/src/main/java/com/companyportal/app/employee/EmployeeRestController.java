@@ -1,6 +1,8 @@
-package com.companyportal.app;
+package com.companyportal.app.employee;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,11 +38,11 @@ public class EmployeeRestController {
 	}
 
 	@RequestMapping(value = "/getEmployee/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
-	public ResponseEntity<Employee> getEmployeeById(@PathVariable int id) {
-		Employee employee = employeeService.getEmployee(id);
+	public ResponseEntity<Employee> getEmployeeById(@PathVariable Integer id) {
+		Optional<Employee> employee = employeeService.getEmployee(id);
 
 		if (employee != null) {
-			return new ResponseEntity<Employee>(employee, HttpStatus.OK);
+			return new ResponseEntity<Employee>(employee.get(), HttpStatus.OK);
 		}
 		return new ResponseEntity<Employee>(HttpStatus.NOT_FOUND);
 	}
@@ -68,7 +70,7 @@ public class EmployeeRestController {
 	}
 
 	@RequestMapping(value = "/deleteEmployee/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
-	public ResponseEntity<String> deleteEmployee(@PathVariable("id") int id) {
+	public ResponseEntity<String> deleteEmployee(@PathVariable("id") Integer id) {
 		try {
 			employeeService.deleteEmployee(id);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
