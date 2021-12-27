@@ -33,7 +33,7 @@ public class Account {
 	@Column(name = "account_balance")
 	private double balance;
 
-	@ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "customer_Id")
 	@JsonIgnoreProperties("account")
 	private Customer customer;

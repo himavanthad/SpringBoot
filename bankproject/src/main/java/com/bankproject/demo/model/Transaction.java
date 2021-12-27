@@ -37,10 +37,9 @@ public class Transaction {
 	private Double availableBalance;
 
 	@Column(name = "transaction_date")
-	// @Temporal(TemporalType.TIMESTAMP)
 	private LocalDateTime transactionDate;
 
-	@ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "account_Id")
 	@JsonIgnoreProperties("transaction")
 	private Account account;
