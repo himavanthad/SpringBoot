@@ -1,7 +1,9 @@
 package com.bankproject.demo.serviceImpl;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,16 +46,18 @@ public class TransactionServiceImpl implements TransactionService {
 			throw new EntryNotFoundException("cannot find receiver's account id");
 
 		Transaction debitTransaction = new Transaction();
-		debitTransaction.setAccount(fromAccount.get());
-		double availableAmountFromAccount = fromAccount.get().getBalance() - transactionDto.getTransactionedAmount();
+		Account fromAccountObj = fromAccount.get();
+		debitTransaction.setAccount(fromAccountObj);
+		double availableAmountFromAccount = fromAccountObj.getBalance() - transactionDto.getTransactionedAmount();
 		debitTransaction.setAvailableBalance(availableAmountFromAccount);
-		debitTransaction.setTransactionDate(new Date());
+		debitTransaction.setTransactionDate(LocalDateTime.now());
 		debitTransaction.setTransactionType("debit");
 		debitTransaction.setTransactionedAmount(transactionDto.getTransactionedAmount());
 		String transactionNumber = "BANK" + getTransactionNumber() + "TR";
 		debitTransaction.setTransactionNumber(transactionNumber);
 		transactionDao.save(debitTransaction);
-
+		fromAccountObj.setBalance(availableAmountFromAccount);
+		accountDao.save(fromAccountObj);
 		Transaction creditTransaction = saveCreditTransaction(transactionDto, transactionNumber, toAccount);
 
 		List<TransactionResponseDto> transactionResponseDtos = new ArrayList<TransactionResponseDto>();
@@ -72,14 +76,17 @@ public class TransactionServiceImpl implements TransactionService {
 			Optional<Account> toAccount) {
 		logger.info("TransactionServiceImpl saveCreditTransaction method started");
 		Transaction transaction = new Transaction();
-		transaction.setAccount(toAccount.get());
-		double availableAmountToAccount = toAccount.get().getBalance() + transactionRequestDto.getTransactionedAmount();
+		Account toAccountObj = toAccount.get();
+		transaction.setAccount(toAccountObj);
+		double availableAmountToAccount = toAccountObj.getBalance() + transactionRequestDto.getTransactionedAmount();
 		transaction.setAvailableBalance(availableAmountToAccount);
-		transaction.setTransactionDate(new Date());
+		transaction.setTransactionDate(LocalDateTime.now());
 		transaction.setTransactionType("credit");
 		transaction.setTransactionedAmount(transactionRequestDto.getTransactionedAmount());
 		transaction.setTransactionNumber(transactionNumber);
 		transactionDao.save(transaction);
+		toAccountObj.setBalance(availableAmountToAccount);
+		accountDao.save(toAccountObj);
 		logger.info("TransactionServiceImpl saveCreditTransaction method ended");
 		return transaction;
 	}
@@ -90,11 +97,16 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public List<TransactionResponseDto> getAllTransactionByFromAndToDates(Date startDate, Date endDate) {
+	public List<TransactionResponseDto> getAllTransactionByFromAndToDates(LocalDate startDate, LocalDate endDate) {
 		logger.info("TransactionServiceImpl getAllTransactionByFromAndToDates method started");
 		List<TransactionResponseDto> transactionResponseDtos = new ArrayList<TransactionResponseDto>();
-		List<Transaction> allTransactionByFromAndToDates = transactionDao.findByTransactionDateBetween(startDate,
-				endDate);
+		LocalDateTime startDateTime = startDate.atTime(LocalTime.now());
+		LocalDateTime endDateTime = endDate.atTime(LocalTime.now());
+		logger.info(
+				"TransactionServiceImpl getAllTransactionByFromAndToDates method started with starte date {} - end date {}",
+				startDateTime, endDateTime);
+		List<Transaction> allTransactionByFromAndToDates = transactionDao.findByTransactionDateBetween(startDateTime,
+				endDateTime);
 		/*
 		 * for(Transaction transaction : allTransactionByFromAndToDates) {
 		 * TransactionResponseDto responseDto = new TransactionResponseDto();
@@ -116,7 +128,7 @@ public class TransactionServiceImpl implements TransactionService {
 		logger.info("TransactionServiceImpl getAllDebitAndCreditTransactionByMonth method started");
 		List<TransactionResponseDto> transactionResponseDtos = new ArrayList<TransactionResponseDto>();
 		List<Transaction> allTransactionByMonth = transactionDao.getAllDebitAndCreditTransactionByMonth(month);
-		allTransactionByMonth.stream().forEach(transaction ->{
+		allTransactionByMonth.stream().forEach(transaction -> {
 			TransactionResponseDto responseDto = new TransactionResponseDto();
 			BeanUtils.copyProperties(transaction, responseDto);
 			transactionResponseDtos.add(responseDto);

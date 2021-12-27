@@ -1,6 +1,6 @@
 package com.bankproject.demo.dto;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
 
@@ -15,7 +15,7 @@ public class TransactionResponseDto {
 	private double availableBalance;
 
 	@NotNull(message = "provide transaction date")
-	private Date transactionDate;
+	private LocalDateTime transactionDate;
 
 	private String transactionType;
 
@@ -30,11 +30,11 @@ public class TransactionResponseDto {
 
 	@NotNull(message = "provide from Date")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-	private Date fromDate;
+	private LocalDateTime fromDate;
 
 	@NotNull(message = "provide to Date")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-	private Date toDate;
+	private LocalDateTime toDate;
 
 	public double getTransactionedAmount() {
 		return transactionedAmount;
@@ -52,11 +52,11 @@ public class TransactionResponseDto {
 		this.availableBalance = availableBalance;
 	}
 
-	public Date getTransactionDate() {
+	public LocalDateTime getTransactionDate() {
 		return transactionDate;
 	}
 
-	public void setTransactionDate(Date transactionDate) {
+	public void setTransactionDate(LocalDateTime transactionDate) {
 		this.transactionDate = transactionDate;
 	}
 
@@ -92,19 +92,19 @@ public class TransactionResponseDto {
 		this.toAccountId = toAccountId;
 	}
 
-	public Date getFromDate() {
+	public LocalDateTime getFromDate() {
 		return fromDate;
 	}
 
-	public void setFromDate(Date fromDate) {
+	public void setFromDate(LocalDateTime fromDate) {
 		this.fromDate = fromDate;
 	}
 
-	public Date getToDate() {
+	public LocalDateTime getToDate() {
 		return toDate;
 	}
 
-	public void setToDate(Date toDate) {
+	public void setToDate(LocalDateTime toDate) {
 		this.toDate = toDate;
 	}
 

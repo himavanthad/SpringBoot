@@ -1,6 +1,6 @@
 package com.bankproject.demo.service;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -14,8 +14,8 @@ public interface TransactionService {
 	List<TransactionResponseDto> saveTransactions(@Valid TransactionDto transactionRequestDto)
 			throws EntryNotFoundException;
 
-	List<TransactionResponseDto> getAllTransactionByFromAndToDates(Date from, Date to);
-
 	List<TransactionResponseDto> getAllDebitAndCreditTransactionByMonth(Integer month);
+
+	List<TransactionResponseDto> getAllTransactionByFromAndToDates(LocalDate fromDate, LocalDate toDate);
 
 }

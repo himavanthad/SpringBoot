@@ -21,7 +21,6 @@ import com.bankproject.demo.dto.AccountResponseDto;
 import com.bankproject.demo.dto.AccountResponseProjection;
 import com.bankproject.demo.exception.CustomerNotFoundException;
 import com.bankproject.demo.service.AccountService;
-import com.bankproject.demo.serviceImpl.AccountServiceImpl;
 
 @RestController
 public class AccountController {

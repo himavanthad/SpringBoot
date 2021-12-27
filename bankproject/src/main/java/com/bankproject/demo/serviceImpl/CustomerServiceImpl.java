@@ -1,7 +1,6 @@
 package com.bankproject.demo.serviceImpl;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +27,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	public Customer addCustomer(CustomerDto customerDto) {
 		logger.info("CustomerServiceImpl saveData method started");
-        Customer cust = new Customer();
+		Customer cust = new Customer();
 		BeanUtils.copyProperties(customerDto, cust);
 		List<Account> accounts = new ArrayList<Account>();
 		/*
@@ -43,15 +42,15 @@ public class CustomerServiceImpl implements CustomerService {
 		logger.info("CustomerServiceImpl saveData method ended");
 		return customerDao.save(cust);
 	}
-    
+
 	public List<CustomerResponseDto> getAllCustomerData() {
 		logger.info("CustomerServiceImpl getAllCustomerData method started");
 		List<CustomerResponseDto> customerResponseList = new ArrayList<CustomerResponseDto>();
 		Iterable<Customer> findAll = customerDao.findAll();
 		/*
-		 * Iterator<Customer> it = findAll.iterator();
-		 * while (it.hasNext()) { CustomerResponseDto responseDto = new
-		 * CustomerResponseDto(); BeanUtils.copyProperties(it.next(), responseDto);
+		 * Iterator<Customer> it = findAll.iterator(); while (it.hasNext()) {
+		 * CustomerResponseDto responseDto = new CustomerResponseDto();
+		 * BeanUtils.copyProperties(it.next(), responseDto);
 		 * customerResponseList.add(responseDto);
 		 * 
 		 * }
@@ -90,7 +89,7 @@ public class CustomerServiceImpl implements CustomerService {
 		if (optionalCustomer.isPresent())
 			customer = optionalCustomer.get();
 		BeanUtils.copyProperties(customer, customerResponseDto);
-		
+
 		logger.info("CustomerServiceImpl getCustomerDataById method ended");
 		return customerResponseDto;
 	}

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,12 +89,12 @@ class TransactionControllerTest {
 		transactionResponseDto.setTransactionType("credit");
 		transactionResponseDto.setTransactionNumber("223344322");
 		transactionResponseDtos.add(transactionResponseDto);
-		when(transcService.getAllTransactionByFromAndToDates(new Date(0), new Date(0)))
+		when(transcService.getAllTransactionByFromAndToDates(LocalDate.now(), LocalDate.now()))
 				.thenReturn(transactionResponseDtos);
 		List<TransactionResponseDto> allTransactionBetweenDatesRst = transactionController
-				.getAllTransactionBetweenDates(new Date(0),new Date(0));
+				.getAllTransactionBetweenDates(LocalDate.now(), LocalDate.now());
 		assertNotNull(allTransactionBetweenDatesRst);
-		verify(transcService, times(1)).getAllTransactionByFromAndToDates(new Date(0), new Date(0));
+		verify(transcService, times(1)).getAllTransactionByFromAndToDates(LocalDate.now(), LocalDate.now());
 		assertEquals(10000, allTransactionBetweenDatesRst.get(0).getAvailableBalance());
 		assertEquals(2, allTransactionBetweenDatesRst.get(0).getFormAccountId());
 		assertEquals(3, allTransactionBetweenDatesRst.get(0).getToAccountId());

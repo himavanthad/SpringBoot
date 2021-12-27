@@ -1,6 +1,6 @@
 package com.bankproject.demo.controller;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bankproject.demo.dto.TransactionDatesDto;
 import com.bankproject.demo.dto.TransactionDto;
 import com.bankproject.demo.dto.TransactionResponseDto;
 import com.bankproject.demo.exception.EntryNotFoundException;
@@ -43,18 +43,16 @@ public class TransactionController {
 
 	@GetMapping("/getAllTransactionByAccountIdDates/{fromDate}/{toDate}")
 	public List<TransactionResponseDto> getAllTransactionBetweenDates(
-			@PathVariable Date fromDate,@PathVariable Date toDate ) {
+			@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+			@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
 		logger.info("TransactionController getAllTransactionBetweenDates method called");
-		return (List<TransactionResponseDto>) transcService
-				.getAllTransactionByFromAndToDates(fromDate, toDate);
+		return (List<TransactionResponseDto>) transcService.getAllTransactionByFromAndToDates(fromDate, toDate);
 	}
-	
+
 	@GetMapping("/getAllDebitAndCreditTransactionByMonth/{month}")
-	public List<TransactionResponseDto> getAllDebitAndCreditTransactionByMonth(
-			@PathVariable Integer month) {
+	public List<TransactionResponseDto> getAllDebitAndCreditTransactionByMonth(@PathVariable Integer month) {
 		logger.info("TransactionController getAllDebitAndCreditTransactionByMonth method called");
-		return (List<TransactionResponseDto>) transcService
-				.getAllDebitAndCreditTransactionByMonth(month);
+		return (List<TransactionResponseDto>) transcService.getAllDebitAndCreditTransactionByMonth(month);
 	}
 
 }
