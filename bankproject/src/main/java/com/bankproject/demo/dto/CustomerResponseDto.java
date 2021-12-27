@@ -2,8 +2,6 @@ package com.bankproject.demo.dto;
 
 import java.util.List;
 
-import javax.persistence.Column;
-
 import com.bankproject.demo.model.Account;
 import com.bankproject.demo.model.Address;
 
@@ -18,7 +16,7 @@ public class CustomerResponseDto {
 	private String phoneNo;
 
 	private String email;
-	
+
 	private List<Account> account;
 
 	public Integer getCustId() {

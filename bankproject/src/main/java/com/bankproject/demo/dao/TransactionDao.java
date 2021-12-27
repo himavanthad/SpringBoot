@@ -1,17 +1,46 @@
 package com.bankproject.demo.dao;
 
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.TemporalType;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.Temporal;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.bankproject.demo.model.Account;
-import com.bankproject.demo.model.Customer;
+import com.bankproject.demo.dto.TransactionResponseDto;
 import com.bankproject.demo.model.Transaction;
 
-public interface TransactionDao{
+@Repository
+public interface TransactionDao extends CrudRepository<Transaction, Long> {
 
-	Account findById(long accountNumber);
+	@Query("FROM Transaction u ORDER BY u.transactionId DESC")
+	Transaction findFirstByOrderByDateDesc();
 
-	long getAccountNumber();
-	
+	/*
+	 * @Query("FROM Transaction u WHERE u.transactionDate BETWEEN :startDate AND :endDate"
+	 * ) List<Transaction> getAllTransactionByFromAndToDates(@Param("startDate")
+	 * LocalDateTime startDate,
+	 * 
+	 * @Param("endDate") LocalDateTime endDate);
+	 */
+	List<Transaction> findByTransactionDateBetween(@Temporal(TemporalType.DATE) Date startDate,
+			@Temporal(TemporalType.DATE) Date endDate);
+
+	@Query("SELECT u FROM Transaction u WHERE month(u.transactionDate) = :month")
+	List<Transaction> getAllDebitAndCreditTransactionByMonth(@Param("month") Integer month);
+
+	/*
+	 * @Query("FROM Transaction u WHERE u.account_Id = :accountId")
+	 * List<Transaction> getAllTransactionByAccountId(Integer accountId);
+	 */
+
+	// Account findById(long accountNumber);
+	// long getAccountNumber();
+	// void save(Transaction transaction);
+	// void save(TransactionDao transactionDao);
 
 }

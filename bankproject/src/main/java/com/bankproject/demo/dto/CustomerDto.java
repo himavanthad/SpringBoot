@@ -3,7 +3,6 @@ package com.bankproject.demo.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Entity;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -12,9 +11,6 @@ import javax.validation.constraints.Size;
 
 import com.bankproject.demo.model.Account;
 import com.bankproject.demo.model.Address;
-import com.bankproject.demo.model.Customer;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 
 public class CustomerDto {
 
@@ -33,7 +29,7 @@ public class CustomerDto {
 	@NotNull(message = "provide mobile no ,only digits")
 	@Pattern(regexp = "[0-9]{10}", message = "provide valid mobile no")
 	private String phoneNo;
-	
+
 	@NotNull(message = "provide account Details")
 	@NotEmpty(message = "Provide account details")
 	private List<Account> account = new ArrayList<>();

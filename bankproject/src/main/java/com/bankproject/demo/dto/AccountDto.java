@@ -2,29 +2,27 @@ package com.bankproject.demo.dto;
 
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import com.bankproject.demo.model.Customer;
 import com.bankproject.demo.model.Transaction;
 
 public class AccountDto {
-	
+
 	@NotNull(message = "provide customer account number")
 	private long accountNumber;
-	
+
 	@NotNull(message = "provide balance ")
 	private double balance;
-	
+
 	@NotNull(message = "provide customer Id")
 	private int custId;
-	
+
 	@NotEmpty(message = "provide account type")
 	private String accountType;
-	
+
 	private List<Transaction> Transaction;
-	
+
 	public long getAccountNumber() {
 		return accountNumber;
 	}
@@ -69,6 +67,5 @@ public class AccountDto {
 	public void setTransaction(List<Transaction> transaction) {
 		Transaction = transaction;
 	}
-
 
 }

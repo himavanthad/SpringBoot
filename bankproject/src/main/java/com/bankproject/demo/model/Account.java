@@ -11,17 +11,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.ManyToAny;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -43,9 +37,10 @@ public class Account {
 	@JoinColumn(name = "customer_Id")
 	@JsonIgnoreProperties("account")
 	private Customer customer;
-	
+
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "account", cascade = CascadeType.ALL)
-	private List<Transaction> Transaction = new ArrayList<Transaction>();
+	@JsonIgnore
+	private List<Transaction> transaction = new ArrayList<Transaction>();
 
 	@Column(name = "account_type")
 	private String accountType;
@@ -98,13 +93,11 @@ public class Account {
 	}
 
 	public List<Transaction> getTransaction() {
-		return Transaction;
+		return transaction;
 	}
 
 	public void setTransaction(List<Transaction> transaction) {
-		Transaction = transaction;
+		this.transaction = transaction;
 	}
-	
-	
 
 }

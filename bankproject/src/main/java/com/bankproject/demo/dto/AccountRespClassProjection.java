@@ -6,9 +6,7 @@ import java.util.List;
 import com.bankproject.demo.model.Customer;
 import com.bankproject.demo.model.Transaction;
 
-public class AccountResponseDto {
-
-	private Integer accountId;
+public class AccountRespClassProjection {
 
 	private Long accountNumber;
 
@@ -16,14 +14,16 @@ public class AccountResponseDto {
 
 	private Customer customer;
 
-	private List<Transaction> Transaction = new ArrayList<Transaction>();
+	private List<Transaction> transaction = new ArrayList<Transaction>();
 
-	public Integer getAccountId() {
-		return accountId;
-	}
+	private String accountType;
 
-	public void setAccountId(Integer accountId) {
-		this.accountId = accountId;
+	public AccountRespClassProjection(Long accountNumber, double balance, Customer customer, String accountType) {
+		// super();
+		this.accountNumber = accountNumber;
+		this.balance = balance;
+		this.customer = customer;
+		this.accountType = accountType;
 	}
 
 	public Long getAccountNumber() {
@@ -51,11 +51,19 @@ public class AccountResponseDto {
 	}
 
 	public List<Transaction> getTransaction() {
-		return Transaction;
+		return transaction;
 	}
 
 	public void setTransaction(List<Transaction> transaction) {
-		Transaction = transaction;
+		this.transaction = transaction;
+	}
+
+	public String getAccountType() {
+		return accountType;
+	}
+
+	public void setAccountType(String accountType) {
+		this.accountType = accountType;
 	}
 
 }
