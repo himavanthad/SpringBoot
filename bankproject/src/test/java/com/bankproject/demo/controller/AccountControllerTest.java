@@ -9,9 +9,11 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.rules.ExpectedException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -23,6 +25,7 @@ import com.bankproject.demo.dto.AccountDto;
 import com.bankproject.demo.dto.AccountRespClassProjection;
 import com.bankproject.demo.dto.AccountResponseDto;
 import com.bankproject.demo.dto.AccountResponseProjection;
+import com.bankproject.demo.exception.CustomerNotFoundException;
 import com.bankproject.demo.service.AccountService;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,6 +38,9 @@ class AccountControllerTest {
 	AccountController accountController;
 
 	AccountDto accountDto;
+	
+	@Rule
+    public ExpectedException thrown = ExpectedException.none();
 
 	@BeforeEach
 	public void setUp() {
@@ -58,6 +64,16 @@ class AccountControllerTest {
 		assertEquals(112233l, saveDataResult.getBody().getAccountNumber());
 		assertEquals(20000, saveDataResult.getBody().getBalance());
 		assertEquals(1, saveDataResult.getBody().getAccountId());
+	}
+
+	//@Test(expected = CustomerNotFoundException.class)
+	void testSaveDataWithException() {
+		when(accountService.saveData(accountDto))
+				.thenThrow(new CustomerNotFoundException("customer doesnot exist this id"));
+		ResponseEntity<AccountResponseDto> saveDataResult = accountController.saveData(accountDto);
+		
+		thrown.expect(CustomerNotFoundException.class);
+		//thrown.expectMessage(containsString("/ by zero"));
 	}
 
 	@Test
